@@ -1,0 +1,33 @@
+---
+title: "tweetCOVID"
+author: "Suschevskiy Vsevolod"
+date: "6/15/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(vroom)
+```
+
+```{r}
+tweets_df <-
+  vroom::vroom("TweetsCOV19_062020_122020.tsv", 
+               col_names = c("Tweet_Id", "Username" ,"Timestamp" ,"Followers", "Friends", "Retweets", "Favorites", "Entities" ,"Sentiment", "Mentions" ,"Hashtags","URLs"))
+
+```
+
+```{r}
+tweets_df %>% 
+  head(100) %>% 
+  separate(Entities, into = "Entity", sep = ";")
+```
+
+```{r}
+
+```
+
