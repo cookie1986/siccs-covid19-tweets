@@ -10,6 +10,13 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ```{r}
+# wget https://zenodo.org/record/4593524/files/TweetsCOV19_062020_122020.tsv.gz?download=1
+
+# gzip -dk TweetsCOV19_062020_122020.tsv.gz?download=1
+```
+
+
+```{r}
 library(tidyverse)
 library(vroom)
 ```
@@ -22,9 +29,11 @@ tweets_df <-
 ```
 
 ```{r}
+?separate
+
 tweets_df %>% 
   head(100) %>% 
-  separate(Entities, into = "Entity", sep = ";")
+  separate(Entities, into = 1:2, sep = ";")
 ```
 
 ```{r}
