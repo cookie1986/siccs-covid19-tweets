@@ -19,6 +19,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r}
 library(tidyverse)
 library(vroom)
+library(stringr)
 ```
 
 ```{r}
@@ -30,13 +31,37 @@ tweets_df <-
 
 ```{r}
 ?separate
+?str_glue
 
 tweets_df %>% 
-  head(100) %>% 
-  separate(Entities, into = 1:2, sep = ";")
+  head(1000) %>% 
+  mutate(Entities = strsplit(Entities, ";")) %>%
+        unnest(Entities) %>%
+        group_by(Tweet_Id) %>%
+        mutate(row = paste("Entity_", row_number())) %>%
+        spread(row, Entities)
 ```
 
 ```{r}
+library(tidytext)
 
+tweets_df %>% 
+  select(Timestamp, Hashtags) %>%
+  head(10000) %>% 
+  filter(Hashtags != "null;") %>% 
+  unnest_tokens(Hashtag, Hashtags,token = "words") -> tweets_hastags
+```
+
+```{r}
+library(lubridate)
+?parse_date_time
+
+tweets_hastags %>% 
+  head(100) %>% 
+  mutate(Timestamp = Timestamp %>% 
+           str_remove("... ") %>% 
+           str_remove(" \\+.+")) %>%
+  mutate(Timestamp = paste("2020 " ,Timestamp)) %>% 
+  mutate(date = ymd_hms(Timestamp))
 ```
 
